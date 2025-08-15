@@ -565,3 +565,195 @@ Grafikler proje dizinine kaydedildi:
 - rf_feature_importance.png (her iki veri seti için)
 - xgb_feature_importance.png (her iki veri seti için)
 - comparative_analysis.png (karşılaştırmalı sonuçlar)
+"""
+Kalp Krizi Risk Tahmin Modeli - Optimizasyon Ana Çalıştırma Dosyası
+"""
+
+import sys
+from pathlib import Path
+
+# Proje kök dizinini Python path'ine ekle
+project_root = Path(__file__).parent
+sys.path.append(str(project_root))
+
+from data.advanced_feature_engineering import AdvancedFeatureEngineer
+from analysis.hyperparameter_tuning import HyperparameterTuner
+from analysis.ensemble_methods import EnsembleMethods
+from utils.data_loader import DataLoader
+
+def main():
+    """Ana fonksiyon - Tüm optimizasyon pipeline'ını çalıştır."""
+    print("="*80)
+    print("KALP KRİZİ RİSK TAHMİN MODELİ - TAM OPTİMİZASYON PIPELINE")
+    print("="*80)
+    
+    # 1. Veri dosyası yolu
+    data_path = project_root / "data" / "cardiokaggle.csv"
+    
+    if not data_path.exists():
+        print(f"HATA: Veri dosyası bulunamadı: {data_path}")
+        return
+    
+    # 2. GELİŞMİŞ FEATURE ENGINEERING
+    print("\n" + "="*50)
+    print("1. GELİŞMİŞ FEATURE ENGINEERING")
+    print("="*50)
+    
+    advanced_fe = AdvancedFeatureEngineer()
+    advanced_data = advanced_fe.advanced_pipeline(str(data_path))
+    
+    if advanced_data is None:
+        print("Gelişmiş feature engineering başarısız!")
+        return
+    
+    print(f"Feature sayısı: {advanced_data['X_train'].shape[1]}")
+    
+    # 3. HYPERPARAMETER TUNING
+    print("\n" + "="*50)
+    print("2. HYPERPARAMETER TUNING")
+    print("="*50)
+    
+    tuner = HyperparameterTuner()
+    best_models = tuner.tune_all_models(
+        advanced_data['X_train'],
+        advanced_data['y_train'],
+        cv=5,
+        n_jobs=-1
+    )
+    
+    # Tune edilmiş modelleri test setinde değerlendir
+    tuning_results = tuner.evaluate_tuned_models(
+        advanced_data['X_test'],
+        advanced_data['y_test']
+    )
+    
+    # 4. ENSEMBLE METHODS
+    print("\n" + "="*50)
+    print("3. ENSEMBLE METHODS")
+    print("="*50)
+    
+    ensemble = EnsembleMethods()
+    ensemble_results = ensemble.run_ensemble_analysis(
+        advanced_data['X_train'],
+        advanced_data['X_test'],
+        advanced_data['y_train'],
+        advanced_data['y_test']
+    )
+    
+    # 5. FİNAL SONUÇLAR
+    print("\n" + "="*80)
+    print("FİNAL OPTİMİZASYON SONUÇLARI")
+    print("="*80)
+    
+    best_tuning_model = max(tuning_results.keys(), key=lambda x: tuning_results[x]['accuracy'])
+    best_tuning_accuracy = tuning_results[best_tuning_model]['accuracy']
+    
+    best_ensemble_model = ensemble_results['best_model_name']
+    best_ensemble_accuracy = ensemble_results['best_accuracy']
+    
+    print(f"Hyperparameter Tuning (En iyi): {best_tuning_accuracy:.4f}")
+    print(f"Ensemble Methods (En iyi): {best_ensemble_accuracy:.4f}")
+    
+    if best_ensemble_accuracy > best_tuning_accuracy:
+        print(f"🏆 En iyi sonuç: {best_ensemble_model} ({best_ensemble_accuracy:.4f})")
+    else:
+        print(f"🏆 En iyi sonuç: {best_tuning_model} ({best_tuning_accuracy:.4f})")
+
+if __name__ == "__main__":
+    main()
+"""
+Kalp Krizi Risk Tahmin Modeli - Optimizasyon Ana Çalıştırma Dosyası
+"""
+
+import sys
+from pathlib import Path
+
+# Proje kök dizinini Python path'ine ekle
+project_root = Path(__file__).parent
+sys.path.append(str(project_root))
+
+from data.advanced_feature_engineering import AdvancedFeatureEngineer
+from analysis.hyperparameter_tuning import HyperparameterTuner
+from analysis.ensemble_methods import EnsembleMethods
+from utils.data_loader import DataLoader
+
+def main():
+    """Ana fonksiyon - Tüm optimizasyon pipeline'ını çalıştır."""
+    print("="*80)
+    print("KALP KRİZİ RİSK TAHMİN MODELİ - TAM OPTİMİZASYON PIPELINE")
+    print("="*80)
+    
+    # 1. Veri dosyası yolu
+    data_path = project_root / "data" / "cardiokaggle.csv"
+    
+    if not data_path.exists():
+        print(f"HATA: Veri dosyası bulunamadı: {data_path}")
+        return
+    
+    # 2. GELİŞMİŞ FEATURE ENGINEERING
+    print("\n" + "="*50)
+    print("1. GELİŞMİŞ FEATURE ENGINEERING")
+    print("="*50)
+    
+    advanced_fe = AdvancedFeatureEngineer()
+    advanced_data = advanced_fe.advanced_pipeline(str(data_path))
+    
+    if advanced_data is None:
+        print("Gelişmiş feature engineering başarısız!")
+        return
+    
+    print(f"Feature sayısı: {advanced_data['X_train'].shape[1]}")
+    
+    # 3. HYPERPARAMETER TUNING
+    print("\n" + "="*50)
+    print("2. HYPERPARAMETER TUNING")
+    print("="*50)
+    
+    tuner = HyperparameterTuner()
+    best_models = tuner.tune_all_models(
+        advanced_data['X_train'],
+        advanced_data['y_train'],
+        cv=5,
+        n_jobs=-1
+    )
+    
+    # Tune edilmiş modelleri test setinde değerlendir
+    tuning_results = tuner.evaluate_tuned_models(
+        advanced_data['X_test'],
+        advanced_data['y_test']
+    )
+    
+    # 4. ENSEMBLE METHODS
+    print("\n" + "="*50)
+    print("3. ENSEMBLE METHODS")
+    print("="*50)
+    
+    ensemble = EnsembleMethods()
+    ensemble_results = ensemble.run_ensemble_analysis(
+        advanced_data['X_train'],
+        advanced_data['X_test'],
+        advanced_data['y_train'],
+        advanced_data['y_test']
+    )
+    
+    # 5. FİNAL SONUÇLAR
+    print("\n" + "="*80)
+    print("FİNAL OPTİMİZASYON SONUÇLARI")
+    print("="*80)
+    
+    best_tuning_model = max(tuning_results.keys(), key=lambda x: tuning_results[x]['accuracy'])
+    best_tuning_accuracy = tuning_results[best_tuning_model]['accuracy']
+    
+    best_ensemble_model = ensemble_results['best_model_name']
+    best_ensemble_accuracy = ensemble_results['best_accuracy']
+    
+    print(f"Hyperparameter Tuning (En iyi): {best_tuning_accuracy:.4f}")
+    print(f"Ensemble Methods (En iyi): {best_ensemble_accuracy:.4f}")
+    
+    if best_ensemble_accuracy > best_tuning_accuracy:
+        print(f"🏆 En iyi sonuç: {best_ensemble_model} ({best_ensemble_accuracy:.4f})")
+    else:
+        print(f"🏆 En iyi sonuç: {best_tuning_model} ({best_tuning_accuracy:.4f})")
+
+if __name__ == "__main__":
+    main()
