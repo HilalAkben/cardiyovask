@@ -1,6 +1,25 @@
 # Kalp Krizi Risk Tahmin Modeli
 
-Bu proje, kalp krizi riskini tahmin etmek için makine öğrenmesi modeli geliştirmeyi amaçlamaktadır. **Outlier'lı ve outliersız veriler için karşılaştırmalı analiz** yaparak en optimal modeli belirler.
+Bu proje, kalp krizi riskini tahmin etmek için makine öğrenmesi modeli geliştirmeyi amaçlamaktadır. **Outlier'lı ve outliersız veriler için karşılaştırmalı analiz** yaparak en optimal modeli belirler. **GPU desteği** ile hızlandırılmış eğitim imkanı sunar.
+
+## 🚀 GPU Desteği
+
+Bu proje artık **GPU desteği** ile gelmektedir! XGBoost ve LightGBM modelleri GPU üzerinde çalıştırılarak eğitim süreleri önemli ölçüde azaltılabilir.
+
+### GPU Gereksinimleri
+- NVIDIA GPU (CUDA uyumlu)
+- CUDA Toolkit 11.0+
+- GPU destekli Python paketleri
+
+### GPU Kurulumu
+Detaylı kurulum rehberi için [GPU_SETUP.md](GPU_SETUP.md) dosyasını inceleyin.
+
+### GPU Testi
+GPU desteğini test etmek için:
+```bash
+cd src
+python test_gpu.py
+```
 
 ## Proje Yapısı
 
@@ -23,6 +42,7 @@ cardiyovask/
 │   ├── test_analysis.py
 │   └── test_cleaned_data.py
 ├── requirements.txt      # Python bağımlılıkları
+├── GPU_SETUP.md         # GPU kurulum rehberi
 └── README.md            # Proje dokümantasyonu
 ```
 
@@ -41,6 +61,15 @@ Outlier'lı ve outliersız veriler için karşılaştırmalı analiz çalıştı
 ```bash
 cd src
 python main.py
+```
+
+### GPU Destekli Optimizasyon Pipeline
+
+GPU desteği ile hızlandırılmış optimizasyon için:
+
+```bash
+cd src
+python main_optimized.py
 ```
 
 ### Ayrı Modüller
@@ -76,7 +105,8 @@ python src/test_analysis.py
 - ✅ Gradient Boosting Classifier
 - ✅ Logistic Regression
 - ✅ Support Vector Machine (SVM)
-- ✅ **XGBoost Classifier** (Yeni!)
+- ✅ **XGBoost Classifier** (GPU desteği ile!)
+- ✅ **LightGBM** (GPU desteği ile!)
 
 ### Değerlendirme Metrikleri
 - ✅ Accuracy, Precision, Recall, F1-Score

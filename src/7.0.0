@@ -1,0 +1,2054 @@
+3 channel Terms of Service accepted
+Channels:
+ - conda-forge
+ - defaults
+Platform: win-64
+Collecting package metadata (repodata.json): - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - done
+Solving environment: | done
+
+## Package Plan ##
+
+  environment location: C:\ProgramData\anaconda3\envs\cardiyo
+
+  added / updated specs:
+    - matplotlib
+    - numpy
+    - openpyxl
+    - pandas
+    - pathlib
+    - pyarrow
+    - scikit-learn
+    - seaborn
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    arrow-cpp-19.0.0           |       h82e8c66_4         7.6 MB
+    aws-c-auth-0.9.0           |      hd490b63_15         113 KB  conda-forge
+    aws-c-cal-0.9.2            |       hd8a8e38_0          48 KB  conda-forge
+    aws-c-common-0.12.3        |       h2466b09_0         230 KB  conda-forge
+    aws-c-compression-0.3.1    |       h5d0e663_5          22 KB  conda-forge
+    aws-c-event-stream-0.5.5   |       ha416645_0          55 KB  conda-forge
+    aws-c-http-0.10.2          |       h81282ae_2         200 KB  conda-forge
+    aws-c-io-0.20.1            |       hf7624bd_1         177 KB  conda-forge
+    aws-c-mqtt-0.13.1          |       h5c1ae27_3         201 KB  conda-forge
+    aws-c-s3-0.8.3             |       h1e843c7_0         124 KB  conda-forge
+    aws-c-sdkutils-0.2.4       |       h5d0e663_0          54 KB  conda-forge
+    aws-checksums-0.2.7        |       h5d0e663_1          91 KB  conda-forge
+    aws-crt-cpp-0.32.10        |       h8abd1a4_2         291 KB  conda-forge
+    aws-sdk-cpp-1.11.528       |       hd293286_1         3.1 MB
+    c-ares-1.34.5              |       h2466b09_0         190 KB  conda-forge
+    et_xmlfile-2.0.0           |     pyhd8ed1ab_1          21 KB  conda-forge
+    gflags-2.2.2               |    he0c23c2_1005          75 KB  conda-forge
+    glog-0.5.0                 |       h4797de2_0          90 KB  conda-forge
+    libabseil-20250127.0       | cxx17_h4eb7d71_0         1.7 MB  conda-forge
+    libbrotlicommon-1.0.9      |       hcfcfb64_9          71 KB  conda-forge
+    libbrotlidec-1.0.9         |       hcfcfb64_9          32 KB  conda-forge
+    libbrotlienc-1.0.9         |       hcfcfb64_9         230 KB  conda-forge
+    libcurl-8.14.1             |       h2300eb9_1         401 KB
+    libprotobuf-5.29.3         |       h65a231f_1         7.5 MB
+    libre2-11-2024.07.02       |       hd248061_3         257 KB  conda-forge
+    libthrift-0.15.0           |       ha2884a9_3         805 KB
+    openpyxl-3.1.5             |  py310h8d17308_1         530 KB  conda-forge
+    pandas-2.3.2               |  py310hed136d8_0        11.1 MB  conda-forge
+    pathlib-1.0.1              |  py310h5588dad_7           5 KB  conda-forge
+    patsy-1.0.1                |     pyhd8ed1ab_1         182 KB  conda-forge
+    pyarrow-19.0.0             |  py310h5da7b33_1         5.3 MB
+    python-tzdata-2025.2       |     pyhd8ed1ab_0         141 KB  conda-forge
+    pytz-2025.2                |     pyhd8ed1ab_0         185 KB  conda-forge
+    re2-2024.07.02             |       haf4117d_3         215 KB  conda-forge
+    seaborn-0.13.2             |       hd8ed1ab_3           7 KB  conda-forge
+    seaborn-base-0.13.2        |     pyhd8ed1ab_3         223 KB  conda-forge
+    snappy-1.2.2               |       h7fa0ca8_0          66 KB  conda-forge
+    statsmodels-0.14.5         |  py310h8f3aa81_0         9.8 MB  conda-forge
+    ------------------------------------------------------------
+                                           Total:        51.5 MB
+
+The following NEW packages will be INSTALLED:
+
+  arrow-cpp          pkgs/main/win-64::arrow-cpp-19.0.0-h82e8c66_4 
+  aws-c-auth         conda-forge/win-64::aws-c-auth-0.9.0-hd490b63_15 
+  aws-c-cal          conda-forge/win-64::aws-c-cal-0.9.2-hd8a8e38_0 
+  aws-c-common       conda-forge/win-64::aws-c-common-0.12.3-h2466b09_0 
+  aws-c-compression  conda-forge/win-64::aws-c-compression-0.3.1-h5d0e663_5 
+  aws-c-event-stream conda-forge/win-64::aws-c-event-stream-0.5.5-ha416645_0 
+  aws-c-http         conda-forge/win-64::aws-c-http-0.10.2-h81282ae_2 
+  aws-c-io           conda-forge/win-64::aws-c-io-0.20.1-hf7624bd_1 
+  aws-c-mqtt         conda-forge/win-64::aws-c-mqtt-0.13.1-h5c1ae27_3 
+  aws-c-s3           conda-forge/win-64::aws-c-s3-0.8.3-h1e843c7_0 
+  aws-c-sdkutils     conda-forge/win-64::aws-c-sdkutils-0.2.4-h5d0e663_0 
+  aws-checksums      conda-forge/win-64::aws-checksums-0.2.7-h5d0e663_1 
+  aws-crt-cpp        conda-forge/win-64::aws-crt-cpp-0.32.10-h8abd1a4_2 
+  aws-sdk-cpp        pkgs/main/win-64::aws-sdk-cpp-1.11.528-hd293286_1 
+  c-ares             conda-forge/win-64::c-ares-1.34.5-h2466b09_0 
+  et_xmlfile         conda-forge/noarch::et_xmlfile-2.0.0-pyhd8ed1ab_1 
+  gflags             conda-forge/win-64::gflags-2.2.2-he0c23c2_1005 
+  glog               conda-forge/win-64::glog-0.5.0-h4797de2_0 
+  libabseil          conda-forge/win-64::libabseil-20250127.0-cxx17_h4eb7d71_0 
+  libbrotlicommon    conda-forge/win-64::libbrotlicommon-1.0.9-hcfcfb64_9 
+  libbrotlidec       conda-forge/win-64::libbrotlidec-1.0.9-hcfcfb64_9 
+  libbrotlienc       conda-forge/win-64::libbrotlienc-1.0.9-hcfcfb64_9 
+  libcurl            pkgs/main/win-64::libcurl-8.14.1-h2300eb9_1 
+  libgrpc            pkgs/main/win-64::libgrpc-1.71.0-hf4237ab_0 
+  libprotobuf        pkgs/main/win-64::libprotobuf-5.29.3-h65a231f_1 
+  libre2-11          conda-forge/win-64::libre2-11-2024.07.02-hd248061_3 
+  libssh2            pkgs/main/win-64::libssh2-1.11.1-h2addb87_0 
+  libthrift          pkgs/main/win-64::libthrift-0.15.0-ha2884a9_3 
+  openpyxl           conda-forge/win-64::openpyxl-3.1.5-py310h8d17308_1 
+  orc                pkgs/main/win-64::orc-2.1.1-hd1c1d5c_0 
+  pandas             conda-forge/win-64::pandas-2.3.2-py310hed136d8_0 
+  pathlib            conda-forge/win-64::pathlib-1.0.1-py310h5588dad_7 
+  patsy              conda-forge/noarch::patsy-1.0.1-pyhd8ed1ab_1 
+  pyarrow            pkgs/main/win-64::pyarrow-19.0.0-py310h5da7b33_1 
+  python-tzdata      conda-forge/noarch::python-tzdata-2025.2-pyhd8ed1ab_0 
+  pytz               conda-forge/noarch::pytz-2025.2-pyhd8ed1ab_0 
+  re2                conda-forge/win-64::re2-2024.07.02-haf4117d_3 
+  seaborn            conda-forge/noarch::seaborn-0.13.2-hd8ed1ab_3 
+  seaborn-base       conda-forge/noarch::seaborn-base-0.13.2-pyhd8ed1ab_3 
+  snappy             conda-forge/win-64::snappy-1.2.2-h7fa0ca8_0 
+  statsmodels        conda-forge/win-64::statsmodels-0.14.5-py310h8f3aa81_0 
+  utf8proc           pkgs/main/win-64::utf8proc-2.6.1-h2bbff1b_1 
+
+
+
+Downloading and Extracting Packages: ...working...pandas-2.3.2         | 11.1 MB   |            |   0% 
+statsmodels-0.14.5   | 9.8 MB    |            |   0% [A
+
+arrow-cpp-19.0.0     | 7.6 MB    |            |   0% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    |            |   0% [A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    |            |   0% [A[A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    |            |   0% [A[A[A[A[A
+
+
+
+
+
+libabseil-20250127.0 | 1.7 MB    |            |   0% [A[A[A[A[A[A
+
+
+
+
+
+
+libthrift-0.15.0     | 805 KB    |            |   0% [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+openpyxl-3.1.5       | 530 KB    |            |   0% [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+libcurl-8.14.1       | 401 KB    |            |   0% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+aws-crt-cpp-0.32.10  | 291 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+libre2-11-2024.07.02 | 257 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libbrotlienc-1.0.9   | 230 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-common-0.12.3  | 230 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+seaborn-base-0.13.2  | 223 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+re2-2024.07.02       | 215 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-mqtt-0.13.1    | 201 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-http-0.10.2    | 200 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c-ares-1.34.5        | 190 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    |            |   0% [A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    |            |   0% [A[A[A[A
+
+arrow-cpp-19.0.0     | 7.6 MB    |            |   0% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | 2          |   3% [A[A[Apandas-2.3.2         | 11.1 MB   |            |   0% 
+statsmodels-0.14.5   | 9.8 MB    |            |   0% [A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | 4          |   5% [A[A[A
+
+arrow-cpp-19.0.0     | 7.6 MB    | 2          |   2% [A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | 2          |   3% [A[A[A[Apandas-2.3.2         | 11.1 MB   |            |   1% 
+statsmodels-0.14.5   | 9.8 MB    |            |   1% [A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | 6          |   7% [A[A[Apandas-2.3.2         | 11.1 MB   | 1          |   2% 
+
+arrow-cpp-19.0.0     | 7.6 MB    | 5          |   5% [A[A
+statsmodels-0.14.5   | 9.8 MB    | 1          |   1% [A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #2         |  13% [A[A[Apandas-2.3.2         | 11.1 MB   | 2          |   3% 
+
+arrow-cpp-19.0.0     | 7.6 MB    | #1         |  11% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #5         |  15% [A[A[Apandas-2.3.2         | 11.1 MB   | 5          |   5% 
+
+arrow-cpp-19.0.0     | 7.6 MB    | #4         |  14% [A[A
+statsmodels-0.14.5   | 9.8 MB    | 2          |   2% [A
+
+arrow-cpp-19.0.0     | 7.6 MB    | #6         |  17% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #8         |  18% [A[A[Apandas-2.3.2         | 11.1 MB   | 8          |   8% pandas-2.3.2         | 11.1 MB   | 9          |   9% 
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ##         |  21% [A[A[A
+
+arrow-cpp-19.0.0     | 7.6 MB    | #9         |  19% [A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | 4          |   5% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | 3          |   4% [A
+
+arrow-cpp-19.0.0     | 7.6 MB    | ##3        |  24% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ##2        |  23% [A[A[A
+statsmodels-0.14.5   | 9.8 MB    | 5          |   6% [A
+
+arrow-cpp-19.0.0     | 7.6 MB    | ##6        |  27% [A[Apandas-2.3.2         | 11.1 MB   | #          |  11% 
+statsmodels-0.14.5   | 9.8 MB    | 6          |   6% [Apandas-2.3.2         | 11.1 MB   | #1         |  12% 
+
+arrow-cpp-19.0.0     | 7.6 MB    | ##9        |  29% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ##6        |  26% [A[A[A
+statsmodels-0.14.5   | 9.8 MB    | 7          |   7% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | 5          |   6% [A[A[A[Apandas-2.3.2         | 11.1 MB   | #3         |  13% 
+
+arrow-cpp-19.0.0     | 7.6 MB    | ###5       |  36% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ###2       |  33% [A[A[A
+statsmodels-0.14.5   | 9.8 MB    | 9          |   9% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | 7          |   7% [A[A[A[Apandas-2.3.2         | 11.1 MB   | #4         |  14% 
+
+arrow-cpp-19.0.0     | 7.6 MB    | ####       |  40% [A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | 7          |   8% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #          |  10% [Apandas-2.3.2         | 11.1 MB   | #5         |  16% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | 8          |   9% [A[A[A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ###6       |  36% [A[A[Apandas-2.3.2         | 11.1 MB   | #6         |  17% pandas-2.3.2         | 11.1 MB   | #7         |  17% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | 9          |  10% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #1         |  11% [A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ###8       |  39% [A[A[A
+
+arrow-cpp-19.0.0     | 7.6 MB    | ####3      |  43% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ####1      |  41% [A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #          |  11% [A[A[A[Apandas-2.3.2         | 11.1 MB   | #8         |  18% 
+statsmodels-0.14.5   | 9.8 MB    | #3         |  14% [A
+
+arrow-cpp-19.0.0     | 7.6 MB    | #####2     |  53% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ####6      |  46% [A[A[Apandas-2.3.2         | 11.1 MB   | #9         |  20% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #2         |  13% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #4         |  14% [Apandas-2.3.2         | 11.1 MB   | ##         |  21% 
+
+arrow-cpp-19.0.0     | 7.6 MB    | #####7     |  57% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ####8      |  49% [A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #3         |  14% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #6         |  16% [Apandas-2.3.2         | 11.1 MB   | ##1        |  22% 
+
+arrow-cpp-19.0.0     | 7.6 MB    | ######3    |  64% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #####3     |  54% [A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #7         |  17% [A
+
+arrow-cpp-19.0.0     | 7.6 MB    | ######7    |  68% [A[Apandas-2.3.2         | 11.1 MB   | ##3        |  23% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #6         |  16% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #8         |  18% [A
+
+arrow-cpp-19.0.0     | 7.6 MB    | #######1   |  72% [A[Apandas-2.3.2         | 11.1 MB   | ##4        |  24% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #7         |  17% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #8         |  19% [A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #####6     |  56% [A[A[A
+
+arrow-cpp-19.0.0     | 7.6 MB    | #######5   |  75% [A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #8         |  18% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #9         |  20% [A
+statsmodels-0.14.5   | 9.8 MB    | ##         |  21% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #9         |  20% [A[A[A[Apandas-2.3.2         | 11.1 MB   | ##4        |  25% 
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #####8     |  59% [A[A[A
+
+arrow-cpp-19.0.0     | 7.6 MB    | #######8   |  78% [A[A
+statsmodels-0.14.5   | 9.8 MB    | ##1        |  21% [Apandas-2.3.2         | 11.1 MB   | ##5        |  26% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ##         |  21% [A[A[A[A
+
+arrow-cpp-19.0.0     | 7.6 MB    | ########   |  81% [A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ##1        |  22% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ##2        |  22% [A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ######     |  60% [A[A[Apandas-2.3.2         | 11.1 MB   | ##6        |  26% 
+
+arrow-cpp-19.0.0     | 7.6 MB    | ########9  |  90% [A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ##2        |  23% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ##3        |  23% [A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ######4    |  65% [A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ##3        |  23% [A[A[A[A
+
+arrow-cpp-19.0.0     | 7.6 MB    | #########3 |  93% [A[A
+statsmodels-0.14.5   | 9.8 MB    | ##4        |  24% [A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ######6    |  67% [A[A[Apandas-2.3.2         | 11.1 MB   | ##6        |  27% 
+
+arrow-cpp-19.0.0     | 7.6 MB    | #########6 |  97% [A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ##4        |  24% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ##4        |  25% [Apandas-2.3.2         | 11.1 MB   | ##7        |  28% pandas-2.3.2         | 11.1 MB   | ##8        |  28% 
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ######8    |  68% [A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ##5        |  25% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ##5        |  26% [A
+statsmodels-0.14.5   | 9.8 MB    | ##7        |  27% [Apandas-2.3.2         | 11.1 MB   | ##9        |  29% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ##7        |  27% [A[A[A[A
+
+arrow-cpp-19.0.0     | 7.6 MB    | #########9 |  99% [A[Apandas-2.3.2         | 11.1 MB   | ##9        |  30% 
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #######3   |  73% [A[A[A
+
+arrow-cpp-19.0.0     | 7.6 MB    | ########## | 100% [A[A
+statsmodels-0.14.5   | 9.8 MB    | ##8        |  28% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ##8        |  28% [A[A[A[Apandas-2.3.2         | 11.1 MB   | ###        |  31% 
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #######7   |  77% [A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ##9        |  29% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ##9        |  30% [A[A[A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #######9   |  80% [A[A[Apandas-2.3.2         | 11.1 MB   | ###1       |  32% 
+statsmodels-0.14.5   | 9.8 MB    | ###        |  31% [A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    |            |   0% [A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ###        |  30% [A[A[A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ########2  |  82% [A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | 7          |   7% [A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ###1       |  32% [A
+
+arrow-cpp-19.0.0     | 7.6 MB    | ########## | 100% [A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ########4  |  85% [A[A[Apandas-2.3.2         | 11.1 MB   | ###2       |  32% 
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ########6  |  87% [A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | #2         |  13% [A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ###1       |  31% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ###2       |  33% [Apandas-2.3.2         | 11.1 MB   | ###3       |  33% 
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | ###        |  31% [A[A[A[A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ########9  |  89% [A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ###3       |  33% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ###4       |  35% [Apandas-2.3.2         | 11.1 MB   | ###3       |  34% 
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #########1 |  92% [A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | ###8       |  38% [A[A[A[A[Apandas-2.3.2         | 11.1 MB   | ###4       |  34% 
+statsmodels-0.14.5   | 9.8 MB    | ###5       |  36% [A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #########5 |  95% [A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | #####1     |  51% [A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ###4       |  35% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ###7       |  37% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ###6       |  36% [A[A[A[Apandas-2.3.2         | 11.1 MB   | ###4       |  35% 
+
+
+libprotobuf-5.29.3   | 7.5 MB    | #########7 |  98% [A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | #####9     |  60% [A[A[A[A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ########## | 100% [A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ###8       |  38% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ###8       |  39% [A[A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | #######4   |  74% [A[A[A[A[Apandas-2.3.2         | 11.1 MB   | ###5       |  35% 
+statsmodels-0.14.5   | 9.8 MB    | ###9       |  39% [Apandas-2.3.2         | 11.1 MB   | ###5       |  36% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ####       |  40% [A[A[A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ########## | 100% [A[A[A
+
+
+libprotobuf-5.29.3   | 7.5 MB    | ########## | 100% [A[A[Apandas-2.3.2         | 11.1 MB   | ###6       |  36% 
+statsmodels-0.14.5   | 9.8 MB    | ####       |  40% [A
+
+
+
+
+
+libabseil-20250127.0 | 1.7 MB    |            |   1% [A[A[A[A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | ########2  |  83% [A[A[A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | ########## | 100% [A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ####1      |  42% [A
+
+
+
+
+
+libabseil-20250127.0 | 1.7 MB    | #1         |  12% [A[A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ####2      |  42% [A[A[A[Apandas-2.3.2         | 11.1 MB   | ###6       |  37% 
+statsmodels-0.14.5   | 9.8 MB    | ####3      |  44% [A
+
+
+
+
+
+libabseil-20250127.0 | 1.7 MB    | ###2       |  33% [A[A[A[A[A[A
+
+
+
+
+
+
+libthrift-0.15.0     | 805 KB    | 1          |   2% [A[A[A[A[A[A[Apandas-2.3.2         | 11.1 MB   | ###7       |  38% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ####4      |  45% [A[A[A[A
+
+
+
+
+
+
+libthrift-0.15.0     | 805 KB    | #9         |  20% [A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ####4      |  45% [A
+
+
+
+
+
+libabseil-20250127.0 | 1.7 MB    | ####4      |  45% [A[A[A[A[A[A
+
+
+
+
+
+
+libthrift-0.15.0     | 805 KB    | ####9      |  50% [A[A[A[A[A[A[Apandas-2.3.2         | 11.1 MB   | ###8       |  38% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ####5      |  46% [A[A[A[A
+
+
+
+
+
+libabseil-20250127.0 | 1.7 MB    | #####6     |  57% [A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ####5      |  46% [Apandas-2.3.2         | 11.1 MB   | ###8       |  39% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ####7      |  47% [A[A[A[A
+
+
+
+
+
+
+libthrift-0.15.0     | 805 KB    | ######9    |  70% [A[A[A[A[A[A[A
+
+
+
+
+
+libabseil-20250127.0 | 1.7 MB    | #######2   |  72% [A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ####6      |  47% [A
+
+
+
+
+
+
+libthrift-0.15.0     | 805 KB    | ########## | 100% [A[A[A[A[A[A[A
+
+
+
+
+
+libabseil-20250127.0 | 1.7 MB    | ########## | 100% [A[A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ####8      |  48% [A[A[A[Apandas-2.3.2         | 11.1 MB   | ###9       |  39% 
+
+
+
+
+
+
+libthrift-0.15.0     | 805 KB    | ########## | 100% [A[A[A[A[A[A[A
+
+
+
+
+
+
+libthrift-0.15.0     | 805 KB    | ########## | 100% [A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ####8      |  49% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ####9      |  50% [A[A[A[Apandas-2.3.2         | 11.1 MB   | ####       |  40% 
+
+
+
+
+
+
+
+
+libcurl-8.14.1       | 401 KB    | 3          |   4% [A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ####9      |  50% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #####      |  51% [A[A[A[A
+
+
+
+
+
+
+
+
+libcurl-8.14.1       | 401 KB    | ######3    |  64% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+openpyxl-3.1.5       | 530 KB    | 3          |   3% [A[A[A[A[A[A[A[Apandas-2.3.2         | 11.1 MB   | ####1      |  41% 
+statsmodels-0.14.5   | 9.8 MB    | #####2     |  52% [A
+
+
+
+
+
+
+
+
+libcurl-8.14.1       | 401 KB    | #########9 | 100% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+libcurl-8.14.1       | 401 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #####3     |  53% [A[A[A[A
+
+
+
+
+
+
+
+openpyxl-3.1.5       | 530 KB    | ###6       |  36% [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+libcurl-8.14.1       | 401 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #####3     |  53% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #####4     |  54% [A[A[A[Apandas-2.3.2         | 11.1 MB   | ####2      |  43% 
+
+
+
+
+
+
+
+openpyxl-3.1.5       | 530 KB    | ######6    |  66% [A[A[A[A[A[A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | ########## | 100% [A[A[A[A[A
+
+
+
+
+aws-sdk-cpp-1.11.528 | 3.1 MB    | ########## | 100% [A[A[A[A[A
+
+
+
+
+
+libabseil-20250127.0 | 1.7 MB    | ########## | 100% [A[A[A[A[A[A
+
+
+
+
+
+libabseil-20250127.0 | 1.7 MB    | ########## | 100% [A[A[A[A[A[A
+
+
+
+
+
+
+
+openpyxl-3.1.5       | 530 KB    | #########  |  91% [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+openpyxl-3.1.5       | 530 KB    | ########## | 100% [A[A[A[A[A[A[A[Apandas-2.3.2         | 11.1 MB   | ####3      |  44% 
+
+
+
+
+
+
+
+
+
+aws-crt-cpp-0.32.10  | 291 KB    | 5          |   5% [A[A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #####4     |  54% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #####5     |  56% [A[A[A[A
+
+
+
+
+
+
+
+
+
+aws-crt-cpp-0.32.10  | 291 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[Apandas-2.3.2         | 11.1 MB   | ####4      |  45% 
+
+
+
+
+
+
+
+
+
+
+libre2-11-2024.07.02 | 257 KB    | 6          |   6% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+aws-crt-cpp-0.32.10  | 291 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #####7     |  58% [A
+
+
+
+
+
+
+
+
+
+aws-crt-cpp-0.32.10  | 291 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+libre2-11-2024.07.02 | 257 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #####9     |  59% [A[A[A[A
+
+
+
+
+
+
+
+
+
+
+libre2-11-2024.07.02 | 257 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[Apandas-2.3.2         | 11.1 MB   | ####5      |  45% 
+
+
+
+
+
+
+
+openpyxl-3.1.5       | 530 KB    | ########## | 100% [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libbrotlienc-1.0.9   | 230 KB    | 6          |   7% [A[A[A[A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #####9     |  59% [Apandas-2.3.2         | 11.1 MB   | ####5      |  46% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ######     |  61% [A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libbrotlienc-1.0.9   | 230 KB    | #########  |  90% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-common-0.12.3  | 230 KB    | 6          |   7% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libbrotlienc-1.0.9   | 230 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libbrotlienc-1.0.9   | 230 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-common-0.12.3  | 230 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ######     |  61% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ######2    |  62% [A[A[A[Apandas-2.3.2         | 11.1 MB   | ####6      |  47% 
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-common-0.12.3  | 230 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-common-0.12.3  | 230 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ######2    |  63% [A
+
+
+
+
+
+
+
+
+
+
+
+
+
+seaborn-base-0.13.2  | 223 KB    | 7          |   7% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+re2-2024.07.02       | 215 KB    | 7          |   7% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+seaborn-base-0.13.2  | 223 KB    | ##1        |  22% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ######4    |  64% [A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+re2-2024.07.02       | 215 KB    | #######4   |  74% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ######4    |  64% [A
+
+
+
+
+
+
+
+
+
+
+
+
+
+seaborn-base-0.13.2  | 223 KB    | ######4    |  65% [A[A[A[A[A[A[A[A[A[A[A[A[A[Apandas-2.3.2         | 11.1 MB   | ####7      |  48% 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+re2-2024.07.02       | 215 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+seaborn-base-0.13.2  | 223 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+re2-2024.07.02       | 215 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+seaborn-base-0.13.2  | 223 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ######6    |  67% [A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-mqtt-0.13.1    | 201 KB    | 7          |   8% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ######8    |  68% [A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-http-0.10.2    | 200 KB    | 8          |   8% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[Apandas-2.3.2         | 11.1 MB   | ####8      |  48% 
+statsmodels-0.14.5   | 9.8 MB    | ######5    |  65% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ######9    |  70% [A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-mqtt-0.13.1    | 201 KB    | #####5     |  56% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-mqtt-0.13.1    | 201 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-mqtt-0.13.1    | 201 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-http-0.10.2    | 200 KB    | ###2       |  32% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ######7    |  67% [Apandas-2.3.2         | 11.1 MB   | ####9      |  50% 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-http-0.10.2    | 200 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws-c-http-0.10.2    | 200 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c-ares-1.34.5        | 190 KB    | 8          |   8% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #######1   |  71% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ######8    |  68% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #######2   |  73% [A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c-ares-1.34.5        | 190 KB    | ####2      |  42% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[Apandas-2.3.2         | 11.1 MB   | #####      |  51% 
+statsmodels-0.14.5   | 9.8 MB    | ######9    |  70% [A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #######4   |  74% [A[A[A[Apandas-2.3.2         | 11.1 MB   | #####1     |  51% 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c-ares-1.34.5        | 190 KB    | #######5   |  76% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c-ares-1.34.5        | 190 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #######    |  71% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #######7   |  78% [A[A[A[Apandas-2.3.2         | 11.1 MB   | #####2     |  52% 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c-ares-1.34.5        | 190 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c-ares-1.34.5        | 190 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #######2   |  72% [Apandas-2.3.2         | 11.1 MB   | #####2     |  53% 
+statsmodels-0.14.5   | 9.8 MB    | #######3   |  73% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #######9   |  79% [A[A[A[Apandas-2.3.2         | 11.1 MB   | #####3     |  53% 
+statsmodels-0.14.5   | 9.8 MB    | #######4   |  75% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ########2  |  83% [A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[Apandas-2.3.2         | 11.1 MB   | #####3     |  54% 
+statsmodels-0.14.5   | 9.8 MB    | #######7   |  77% [Apandas-2.3.2         | 11.1 MB   | #####4     |  55% pandas-2.3.2         | 11.1 MB   | #####6     |  57% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ########4  |  85% [A[A[A[A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ########6  |  86% [A[A[A[Apandas-2.3.2         | 11.1 MB   | #####7     |  58% 
+statsmodels-0.14.5   | 9.8 MB    | #######8   |  78% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ########9  |  89% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #######9   |  80% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #########  |  91% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ########1  |  81% [Apandas-2.3.2         | 11.1 MB   | #####8     |  59% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #########2 |  93% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ########2  |  82% [Apandas-2.3.2         | 11.1 MB   | ######     |  61% 
+statsmodels-0.14.5   | 9.8 MB    | ########3  |  84% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #########6 |  97% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ########5  |  85% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | #########9 |  99% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | ########6  |  87% [A
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ########## | 100% [A[A[A[Apandas-2.3.2         | 11.1 MB   | ######1    |  62% 
+statsmodels-0.14.5   | 9.8 MB    | ########8  |  89% [Apandas-2.3.2         | 11.1 MB   | ######3    |  63% 
+statsmodels-0.14.5   | 9.8 MB    | #########1 |  92% [Apandas-2.3.2         | 11.1 MB   | ######4    |  64% 
+statsmodels-0.14.5   | 9.8 MB    | #########3 |  94% [Apandas-2.3.2         | 11.1 MB   | ######6    |  67% 
+statsmodels-0.14.5   | 9.8 MB    | #########5 |  95% [Apandas-2.3.2         | 11.1 MB   | ######7    |  68% 
+
+
+
+pyarrow-19.0.0       | 5.3 MB    | ########## | 100% [A[A[A[A
+statsmodels-0.14.5   | 9.8 MB    | #########7 |  97% [Apandas-2.3.2         | 11.1 MB   | ######9    |  69% pandas-2.3.2         | 11.1 MB   | #######2   |  72% 
+statsmodels-0.14.5   | 9.8 MB    | #########9 |  99% [A
+statsmodels-0.14.5   | 9.8 MB    | ########## | 100% [Apandas-2.3.2         | 11.1 MB   | #######4   |  74% pandas-2.3.2         | 11.1 MB   | #######8   |  78% pandas-2.3.2         | 11.1 MB   | ########   |  81% pandas-2.3.2         | 11.1 MB   | ########4  |  84% pandas-2.3.2         | 11.1 MB   | ########6  |  86% pandas-2.3.2         | 11.1 MB   | #########  |  90% pandas-2.3.2         | 11.1 MB   | #########2 |  92% pandas-2.3.2         | 11.1 MB   | #########5 |  95% pandas-2.3.2         | 11.1 MB   | #########7 |  98% pandas-2.3.2         | 11.1 MB   | #########9 | 100% pandas-2.3.2         | 11.1 MB   | ########## | 100% 
+statsmodels-0.14.5   | 9.8 MB    | ########## | 100% [Apandas-2.3.2         | 11.1 MB   | ########## | 100% 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A                                                     
+                                                     [A
+
+                                                     [A[A
+
+
+                                                     [A[A[A
+
+
+
+                                                     [A[A[A[A
+
+
+
+
+                                                     [A[A[A[A[A
+
+
+
+
+
+                                                     [A[A[A[A[A[A
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+[A
+
+[A[A
+
+
+[A[A[A
+
+
+
+[A[A[A[A
+
+
+
+
+[A[A[A[A[A
+
+
+
+
+
+[A[A[A[A[A[A
+
+
+
+
+
+
+[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A done
+Preparing transaction: - \ | done
+Verifying transaction: - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - done
+Executing transaction: | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ done

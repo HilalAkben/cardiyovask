@@ -36,7 +36,7 @@ class EnsembleMethods:
         self.ensemble_models = {}
         self.results = {}
         
-    def create_base_models(self):
+    def create_base_models(self, gpu_params=None):
         """Temel modelleri oluştur."""
         self.base_models = {
             'Random Forest': RandomForestClassifier(
@@ -55,12 +55,23 @@ class EnsembleMethods:
             )
         }
         
-        # XGBoost ekle
+        # XGBoost ekle - GPU parametreleri ile
         if XGBOOST_AVAILABLE:
-            self.base_models['XGBoost'] = xgb.XGBClassifier(
-                n_estimators=200, learning_rate=0.1, max_depth=6,
-                subsample=0.9, colsample_bytree=0.9, random_state=42
-            )
+            xgb_params = {
+                'n_estimators': 200, 
+                'learning_rate': 0.1, 
+                'max_depth': 6,
+                'subsample': 0.9, 
+                'colsample_bytree': 0.9, 
+                'random_state': 42
+            }
+            
+            # GPU parametrelerini ekle
+            if gpu_params and 'xgboost' in gpu_params:
+                xgb_params.update(gpu_params['xgboost'])
+                print("✅ XGBoost GPU parametreleri eklendi")
+            
+            self.base_models['XGBoost'] = xgb.XGBClassifier(**xgb_params)
         
         print(f"{len(self.base_models)} temel model oluşturuldu.")
     
@@ -341,14 +352,14 @@ class EnsembleMethods:
         
         return cv_results
     
-    def run_ensemble_analysis(self, X_train, X_test, y_train, y_test):
+    def run_ensemble_analysis(self, X_train, X_test, y_train, y_test, gpu_params=None):
         """Tam ensemble analizi çalıştır."""
         print("="*60)
         print("ENSEMBLE METHODS ANALİZİ")
         print("="*60)
         
         # 1. Temel modelleri oluştur
-        self.create_base_models()
+        self.create_base_models(gpu_params)
         
         # 2. Ensemble modelleri oluştur
         self.create_voting_classifier(voting='soft')

@@ -1,9 +1,12 @@
 """
 Kalp Krizi Risk Tahmin Modeli - Optimizasyon Ana Çalıştırma Dosyası
-Sadece Gradient Boosting ve XGBoost için - Outlier'lı ve Outlier'sız Karşılaştırması
+Sadece Gradient Boosting ve XGBoost için - Outlier'lı Verilerle
+GPU Desteği ile
 """
 
 import sys
+import pickle
+import os
 from pathlib import Path
 
 # Proje kök dizinini Python path'ine ekle
@@ -15,12 +18,195 @@ from analysis.hyperparameter_tuning import HyperparameterTuner
 from analysis.ensemble_methods import EnsembleMethods
 from utils.data_loader import DataLoader
 
+def check_gpu_availability():
+    """GPU kullanılabilirliğini kontrol et ve yapılandır."""
+    gpu_config = {
+        'xgboost_gpu': False,
+        'lightgbm_gpu': False,
+        'cuda_available': False,
+        'gpu_count': 0
+    }
+    
+    print("\n" + "="*60)
+    print("GPU KULLANILABİLİRLİK KONTROLÜ")
+    print("="*60)
+    
+    # CUDA kontrolü
+    try:
+        import torch
+        if torch.cuda.is_available():
+            gpu_config['cuda_available'] = True
+            gpu_config['gpu_count'] = torch.cuda.device_count()
+            print(f"✅ CUDA kullanılabilir - {gpu_config['gpu_count']} GPU bulundu")
+            
+            for i in range(gpu_config['gpu_count']):
+                gpu_name = torch.cuda.get_device_name(i)
+                gpu_memory = torch.cuda.get_device_properties(i).total_memory / 1024**3
+                print(f"  GPU {i}: {gpu_name} ({gpu_memory:.1f} GB)")
+        else:
+            print("❌ CUDA kullanılamıyor")
+    except ImportError:
+        print("❌ PyTorch yüklü değil - CUDA kontrolü yapılamıyor")
+    
+    # XGBoost GPU kontrolü
+    try:
+        import xgboost as xgb
+        # XGBoost'un GPU desteğini kontrol et
+        try:
+            # GPU parametresi ile test et
+            test_data = xgb.DMatrix([[1, 2, 3], [4, 5, 6]], label=[0, 1])
+            test_params = {'tree_method': 'gpu_hist', 'gpu_id': 0}
+            bst = xgb.train(test_params, test_data, num_boost_round=1, verbose_eval=False)
+            gpu_config['xgboost_gpu'] = True
+            print("✅ XGBoost GPU desteği aktif")
+        except Exception as e:
+            print(f"❌ XGBoost GPU desteği yok: {str(e)}")
+    except ImportError:
+        print("❌ XGBoost yüklü değil")
+    
+    # LightGBM GPU kontrolü
+    try:
+        import lightgbm as lgb
+        # LightGBM'in GPU desteğini kontrol et
+        try:
+            test_data = lgb.Dataset([[1, 2, 3], [4, 5, 6]], label=[0, 1])
+            test_params = {'device': 'gpu', 'gpu_platform_id': 0, 'gpu_device_id': 0}
+            gbm = lgb.train(test_params, test_data, num_boost_round=1, verbose_eval=False)
+            gpu_config['lightgbm_gpu'] = True
+            print("✅ LightGBM GPU desteği aktif")
+        except Exception as e:
+            print(f"❌ LightGBM GPU desteği yok: {str(e)}")
+    except ImportError:
+        print("❌ LightGBM yüklü değil")
+    
+    return gpu_config
+
+def configure_gpu_parameters(gpu_config):
+    """GPU parametrelerini yapılandır."""
+    gpu_params = {}
+    
+    if gpu_config['xgboost_gpu']:
+        gpu_params['xgboost'] = {
+            'tree_method': 'gpu_hist',
+            'gpu_id': 0,
+            'predictor': 'gpu_predictor'
+        }
+        print("✅ XGBoost GPU parametreleri yapılandırıldı")
+    
+    if gpu_config['lightgbm_gpu']:
+        gpu_params['lightgbm'] = {
+            'device': 'gpu',
+            'gpu_platform_id': 0,
+            'gpu_device_id': 0,
+            'gpu_use_dp': True
+        }
+        print("✅ LightGBM GPU parametreleri yapılandırıldı")
+    
+    return gpu_params
+
+def save_models_to_pickle(tuner, ensemble, data, tuning_results, ensemble_results, nested_cv_results=None):
+    """Eğitilmiş modelleri pickle formatında kaydet."""
+    
+    # Models klasörü oluştur
+    models_dir = project_root / "models"
+    models_dir.mkdir(exist_ok=True)
+    
+    print("\n" + "="*60)
+    print("MODELLERİ PICKLE FORMATINDA KAYDETME")
+    print("="*60)
+    
+    # 1. Hyperparameter Tuning Modelleri
+    print("\n--- HYPERPARAMETER TUNING MODELLERİ KAYDEDİLİYOR ---")
+    
+    for name, model in tuner.best_models.items():
+        filename = f"tuning_{name.lower().replace(' ', '_')}.pkl"
+        filepath = models_dir / filename
+        
+        with open(filepath, 'wb') as f:
+            pickle.dump(model, f)
+        print(f"  ✅ {name} kaydedildi: {filename}")
+    
+    # 2. Ensemble Modelleri
+    print("\n--- ENSEMBLE MODELLERİ KAYDEDİLİYOR ---")
+    
+    for name, model in ensemble.ensemble_models.items():
+        filename = f"ensemble_{name.lower().replace(' ', '_').replace('(', '').replace(')', '')}.pkl"
+        filepath = models_dir / filename
+        
+        with open(filepath, 'wb') as f:
+            pickle.dump(model, f)
+        print(f"  ✅ {name} kaydedildi: {filename}")
+    
+    # 3. En İyi Modelleri Ayrıca Kaydet
+    print("\n--- EN İYİ MODELLERİ KAYDETME ---")
+    
+    # En iyi tuning modeli
+    best_tuning = max(tuning_results.keys(), 
+                     key=lambda x: tuning_results[x]['accuracy'])
+    
+    # En iyi ensemble modeli
+    best_ensemble = ensemble_results['best_model_name']
+    
+    # En iyi modelleri kaydet
+    best_models = {
+        'best_tuning': tuner.best_models[best_tuning],
+        'best_ensemble': ensemble.ensemble_models[best_ensemble]
+    }
+    
+    for name, model in best_models.items():
+        filename = f"{name}.pkl"
+        filepath = models_dir / filename
+        
+        with open(filepath, 'wb') as f:
+            pickle.dump(model, f)
+        print(f"  ✅ {name} kaydedildi: {filename}")
+    
+    # 4. Feature Engineering Bilgilerini Kaydet
+    print("\n--- FEATURE ENGINEERING BİLGİLERİ KAYDEDİLİYOR ---")
+    
+    fe_info = {
+        'feature_names': data['feature_names'],
+        'scaler': data.get('scaler', None),
+        'label_encoders': data.get('label_encoders', {}),
+        'data_type': 'with_outliers'
+    }
+    
+    with open(models_dir / "feature_engineering.pkl", 'wb') as f:
+        pickle.dump(fe_info, f)
+    print(f"  ✅ Feature engineering bilgileri kaydedildi")
+    
+    # 5. Model Performans Sonuçlarını Kaydet
+    print("\n--- MODEL PERFORMANS SONUÇLARI KAYDEDİLİYOR ---")
+    
+    performance_results = {
+        'tuning_results': tuning_results,
+        'ensemble_results': ensemble_results,
+        'nested_cv_results': nested_cv_results,
+        'best_tuning_model': best_tuning,
+        'best_ensemble_model': best_ensemble,
+        'best_tuning_accuracy': tuning_results[best_tuning]['accuracy'],
+        'best_ensemble_accuracy': ensemble_results['best_accuracy']
+    }
+    
+    with open(models_dir / "model_performance_results.pkl", 'wb') as f:
+        pickle.dump(performance_results, f)
+    print(f"  ✅ Model performans sonuçları kaydedildi")
+    
+    print(f"\n📁 Tüm modeller '{models_dir}' klasörüne kaydedildi!")
+    print(f"📊 Toplam kaydedilen dosya sayısı: {len(list(models_dir.glob('*.pkl')))}")
+    
+    return models_dir
+
 def main():
-    """Ana fonksiyon - Gradient Boosting ve XGBoost için outlier karşılaştırmalı optimizasyon."""
+    """Ana fonksiyon - Gradient Boosting ve XGBoost için optimizasyon (outlier'lı verilerle) - GPU Desteği ile."""
     print("="*80)
     print("KALP KRİZİ RİSK TAHMİN MODELİ - GB & XGBOOST OPTİMİZASYON")
-    print("OUTLIER'LI vs OUTLIER'SIZ KARŞILAŞTIRMASI")
+    print("OUTLIER'LI VERİLERLE - GPU DESTEĞİ İLE")
     print("="*80)
+    
+    # GPU kontrolü ve yapılandırması
+    gpu_config = check_gpu_availability()
+    gpu_params = configure_gpu_parameters(gpu_config)
     
     # 1. Veri dosyası yolu
     data_path = project_root / "data" / "cardiokaggle.csv"
@@ -32,7 +218,7 @@ def main():
     
     print(f"Veri dosyası: {data_path}")
     
-    # 2. GELİŞMİŞ FEATURE ENGINEERING - İKİ FARKLI PIPELINE
+    # 2. GELİŞMİŞ FEATURE ENGINEERING
     print("\n" + "="*60)
     print("1. GELİŞMİŞ FEATURE ENGINEERING")
     print("="*60)
@@ -40,166 +226,131 @@ def main():
     advanced_fe = AdvancedFeatureEngineer()
     
     # Outlier'lı verilerle işleme
-    print("\n--- OUTLIER'LAR İLE İŞLEME ---")
-    data_with_outliers = advanced_fe.advanced_pipeline_with_outliers(str(data_path))
-    if data_with_outliers is None:
-        print("Outlier'lı veri işleme başarısız!")
-        return
-    
-    # Outlier'lar çıkarılarak işleme
-    print("\n--- OUTLIER'LAR ÇIKARILARAK İŞLEME ---")
-    data_without_outliers = advanced_fe.advanced_pipeline_without_outliers(str(data_path))
-    if data_without_outliers is None:
-        print("Outlier'lar çıkarılarak veri işleme başarısız!")
+    print("\n--- GELİŞMİŞ FEATURE ENGINEERING ---")
+    data = advanced_fe.advanced_pipeline_with_outliers(str(data_path))
+    if data is None:
+        print("Veri işleme başarısız!")
         return
     
     print(f"\nFeature Engineering Tamamlandı!")
-    print(f"Outlier'lı veri - Feature sayısı: {data_with_outliers['X_train'].shape[1]}")
-    print(f"Outlier'sız veri - Feature sayısı: {data_without_outliers['X_train'].shape[1]}")
+    print(f"Feature sayısı: {data['X_train'].shape[1]}")
+    print(f"Eğitim seti: {data['X_train'].shape}")
+    print(f"Test seti: {data['X_test'].shape}")
     
-    # 3. HYPERPARAMETER TUNING - İKİ VERİ SETİ İÇİN
+    # 3. HYPERPARAMETER TUNING - GPU DESTEĞİ İLE
     print("\n" + "="*60)
-    print("2. HYPERPARAMETER TUNING - GRADIENT BOOSTING & XGBOOST")
+    print("2. HYPERPARAMETER TUNING - GRADIENT BOOSTING & XGBOOST (GPU)")
     print("="*60)
     
     tuner = HyperparameterTuner()
     
-    # Outlier'lı veriler için tuning
-    print("\n--- OUTLIER'LI VERİLER İÇİN TUNING ---")
-    best_models_with_outliers = tuner.tune_all_models(
-        data_with_outliers['X_train'],
-        data_with_outliers['y_train'],
+    print("\n--- HYPERPARAMETER TUNING (GPU DESTEĞİ İLE) ---")
+    
+    # GPU parametrelerini hyperparameter tuning'e geçir
+    best_models = tuner.tune_all_models(
+        data['X_train'],
+        data['y_train'],
         cv=5,
-        n_jobs=-1
+        n_jobs=-1,
+        gpu_params=gpu_params  # GPU parametrelerini geçir
     )
     
-    # Outlier'sız veriler için tuning
-    print("\n--- OUTLIER'SIZ VERİLER İÇİN TUNING ---")
-    best_models_without_outliers = tuner.tune_all_models(
-        data_without_outliers['X_train'],
-        data_without_outliers['y_train'],
-        cv=5,
-        n_jobs=-1
-    )
-    
-    # 4. TUNE EDİLMİŞ MODELLERİ DEĞERLENDİR
+    # 4. NESTED CROSS-VALIDATION
     print("\n" + "="*60)
-    print("3. TUNE EDİLMİŞ MODELLERİN DEĞERLENDİRİLMESİ")
+    print("3. NESTED CROSS-VALIDATION ANALİZİ")
     print("="*60)
     
-    # Outlier'lı veriler için değerlendirme
-    print("\n--- OUTLIER'LI VERİLER İÇİN DEĞERLENDİRME ---")
-    tuning_results_with_outliers = tuner.evaluate_tuned_models(
-        data_with_outliers['X_test'],
-        data_with_outliers['y_test']
+    print("\n--- NESTED CROSS-VALIDATION (ROBUST MODEL EVALUATION) ---")
+    nested_cv_results = tuner.nested_cv_all_models(
+        data['X_train'],
+        data['y_train'],
+        cv_outer=5,
+        cv_inner=5,
+        n_jobs=-1,
+        gpu_params=gpu_params
     )
     
-    # Outlier'sız veriler için değerlendirme
-    print("\n--- OUTLIER'SIZ VERİLER İÇİN DEĞERLENDİRME ---")
-    tuning_results_without_outliers = tuner.evaluate_tuned_models(
-        data_without_outliers['X_test'],
-        data_without_outliers['y_test']
-    )
-    
-    # 5. ENSEMBLE METHODS - İKİ VERİ SETİ İÇİN
+    # 5. TUNE EDİLMİŞ MODELLERİ DEĞERLENDİR
     print("\n" + "="*60)
-    print("4. ENSEMBLE METHODS - GRADIENT BOOSTING & XGBOOST")
+    print("4. TUNE EDİLMİŞ MODELLERİN DEĞERLENDİRİLMESİ")
+    print("="*60)
+    
+    print("\n--- TUNE EDİLMİŞ MODELLERİN DEĞERLENDİRİLMESİ ---")
+    tuning_results = tuner.evaluate_tuned_models(
+        data['X_test'],
+        data['y_test']
+    )
+    
+    # 6. ENSEMBLE METHODS - GPU DESTEĞİ İLE
+    print("\n" + "="*60)
+    print("5. ENSEMBLE METHODS - GRADIENT BOOSTING & XGBOOST (GPU)")
     print("="*60)
     
     ensemble = EnsembleMethods()
     
-    # Outlier'lı veriler için ensemble
-    print("\n--- OUTLIER'LI VERİLER İÇİN ENSEMBLE ---")
-    ensemble_results_with_outliers = ensemble.run_ensemble_analysis(
-        data_with_outliers['X_train'],
-        data_with_outliers['X_test'],
-        data_with_outliers['y_train'],
-        data_with_outliers['y_test']
+    print("\n--- ENSEMBLE METHODS (GPU DESTEĞİ İLE) ---")
+    ensemble_results = ensemble.run_ensemble_analysis(
+        data['X_train'],
+        data['X_test'],
+        data['y_train'],
+        data['y_test'],
+        gpu_params=gpu_params  # GPU parametrelerini geçir
     )
     
-    # Outlier'sız veriler için ensemble
-    print("\n--- OUTLIER'SIZ VERİLER İÇİN ENSEMBLE ---")
-    ensemble_results_without_outliers = ensemble.run_ensemble_analysis(
-        data_without_outliers['X_train'],
-        data_without_outliers['X_test'],
-        data_without_outliers['y_train'],
-        data_without_outliers['y_test']
-    )
-    
-    # 6. FİNAL KARŞILAŞTIRMALI SONUÇLAR
+    # 7. FİNAL SONUÇLAR
     print("\n" + "="*80)
-    print("FİNAL KARŞILAŞTIRMALI OPTİMİZASYON SONUÇLARI")
+    print("FİNAL OPTİMİZASYON SONUÇLARI (GPU DESTEĞİ İLE)")
     print("="*80)
+    
+    # GPU kullanım bilgileri
+    print(f"\nGPU KULLANIM BİLGİLERİ:")
+    print(f"CUDA Kullanılabilir: {'✅' if gpu_config['cuda_available'] else '❌'}")
+    print(f"GPU Sayısı: {gpu_config['gpu_count']}")
+    print(f"XGBoost GPU: {'✅' if gpu_config['xgboost_gpu'] else '❌'}")
+    print(f"LightGBM GPU: {'✅' if gpu_config['lightgbm_gpu'] else '❌'}")
     
     # Veri seti bilgileri
     print(f"\nVERİ SETİ BİLGİLERİ:")
-    print(f"Outlier'lı veri - Eğitim: {data_with_outliers['X_train'].shape}, Test: {data_with_outliers['X_test'].shape}")
-    print(f"Outlier'sız veri - Eğitim: {data_without_outliers['X_train'].shape}, Test: {data_without_outliers['X_test'].shape}")
+    print(f"Eğitim seti: {data['X_train'].shape}")
+    print(f"Test seti: {data['X_test'].shape}")
+    print(f"Feature sayısı: {data['X_train'].shape[1]}")
     
     # Hyperparameter Tuning sonuçları
     print(f"\nHYPERPARAMETER TUNING SONUÇLARI:")
     print("-" * 60)
     
-    # Outlier'lı veriler için en iyi model
-    best_tuning_with_outliers = max(tuning_results_with_outliers.keys(), 
-                                   key=lambda x: tuning_results_with_outliers[x]['accuracy'])
-    best_tuning_acc_with_outliers = tuning_results_with_outliers[best_tuning_with_outliers]['accuracy']
+    # En iyi tuning modeli
+    best_tuning = max(tuning_results.keys(), 
+                     key=lambda x: tuning_results[x]['accuracy'])
+    best_tuning_acc = tuning_results[best_tuning]['accuracy']
     
-    # Outlier'sız veriler için en iyi model
-    best_tuning_without_outliers = max(tuning_results_without_outliers.keys(), 
-                                      key=lambda x: tuning_results_without_outliers[x]['accuracy'])
-    best_tuning_acc_without_outliers = tuning_results_without_outliers[best_tuning_without_outliers]['accuracy']
-    
-    print(f"Outlier'lı veri - En iyi: {best_tuning_with_outliers} ({best_tuning_acc_with_outliers:.4f})")
-    print(f"Outlier'sız veri - En iyi: {best_tuning_without_outliers} ({best_tuning_acc_without_outliers:.4f})")
+    print(f"En iyi tuning modeli: {best_tuning}")
+    print(f"En iyi accuracy: {best_tuning_acc:.4f}")
     
     # Ensemble Methods sonuçları
     print(f"\nENSEMBLE METHODS SONUÇLARI:")
     print("-" * 60)
     
-    best_ensemble_with_outliers = ensemble_results_with_outliers['best_model_name']
-    best_ensemble_acc_with_outliers = ensemble_results_with_outliers['best_accuracy']
+    best_ensemble = ensemble_results['best_model_name']
+    best_ensemble_acc = ensemble_results['best_accuracy']
     
-    best_ensemble_without_outliers = ensemble_results_without_outliers['best_model_name']
-    best_ensemble_acc_without_outliers = ensemble_results_without_outliers['best_accuracy']
-    
-    print(f"Outlier'lı veri - En iyi: {best_ensemble_with_outliers} ({best_ensemble_acc_with_outliers:.4f})")
-    print(f"Outlier'sız veri - En iyi: {best_ensemble_without_outliers} ({best_ensemble_acc_without_outliers:.4f})")
+    print(f"En iyi ensemble modeli: {best_ensemble}")
+    print(f"En iyi accuracy: {best_ensemble_acc:.4f}")
     
     # 7. KARŞILAŞTIRMALI ÖZET
     print(f"\n" + "="*60)
     print("KARŞILAŞTIRMALI ÖZET")
     print("="*60)
     
-    print(f"\nOUTLIER'LI VERİLER:")
-    print(f"  Hyperparameter Tuning: {best_tuning_acc_with_outliers:.4f}")
-    print(f"  Ensemble Methods: {best_ensemble_acc_with_outliers:.4f}")
+    print(f"Hyperparameter Tuning (En iyi): {best_tuning_acc:.4f}")
+    print(f"Ensemble Methods (En iyi): {best_ensemble_acc:.4f}")
     
-    print(f"\nOUTLIER'SIZ VERİLER:")
-    print(f"  Hyperparameter Tuning: {best_tuning_acc_without_outliers:.4f}")
-    print(f"  Ensemble Methods: {best_ensemble_acc_without_outliers:.4f}")
-    
-    # En iyi genel sonuç
-    all_accuracies = {
-        'Outlier\'lı - Tuning': best_tuning_acc_with_outliers,
-        'Outlier\'lı - Ensemble': best_ensemble_acc_with_outliers,
-        'Outlier\'sız - Tuning': best_tuning_acc_without_outliers,
-        'Outlier\'sız - Ensemble': best_ensemble_acc_without_outliers
-    }
-    
-    best_overall = max(all_accuracies.keys(), key=lambda x: all_accuracies[x])
-    best_overall_acc = all_accuracies[best_overall]
-    
-    print(f"\n EN İYİ GENEL SONUÇ:")
-    print(f"  {best_overall}: {best_overall_acc:.4f}")
-    
-    # Outlier etkisi analizi
-    print(f"\nOUTLIER ETKİSİ ANALİZİ:")
-    tuning_diff = best_tuning_acc_without_outliers - best_tuning_acc_with_outliers
-    ensemble_diff = best_ensemble_acc_without_outliers - best_ensemble_acc_with_outliers
-    
-    print(f"  Hyperparameter Tuning: Outlier'sız veri {tuning_diff:+.4f} farkla {'daha iyi' if tuning_diff > 0 else 'daha kötü'}")
-    print(f"  Ensemble Methods: Outlier'sız veri {ensemble_diff:+.4f} farkla {'daha iyi' if ensemble_diff > 0 else 'daha kötü'}")
+    if best_ensemble_acc > best_tuning_acc:
+        print(f"🏆 En iyi sonuç: {best_ensemble} ({best_ensemble_acc:.4f})")
+        print(f"Ensemble methods, hyperparameter tuning'den {(best_ensemble_acc - best_tuning_acc)*100:.2f}% daha iyi!")
+    else:
+        print(f"🏆 En iyi sonuç: {best_tuning} ({best_tuning_acc:.4f})")
+        print(f"Hyperparameter tuning, ensemble methods'dan {(best_tuning_acc - best_ensemble_acc)*100:.2f}% daha iyi!")
     
     # 8. DETAYLI SONUÇ TABLOLARI
     print(f"\n" + "="*80)
@@ -212,40 +363,65 @@ def main():
     print(f"\nHYPERPARAMETER TUNING SONUÇLARI:")
     print("-" * 60)
     
-    tuning_comparison = pd.DataFrame({
-        'Model': list(tuning_results_with_outliers.keys()),
-        'Outlier\'lı Accuracy': [tuning_results_with_outliers[name]['accuracy'] for name in tuning_results_with_outliers.keys()],
-        'Outlier\'sız Accuracy': [tuning_results_without_outliers[name]['accuracy'] for name in tuning_results_without_outliers.keys()],
-        'Outlier\'lı F1': [tuning_results_with_outliers[name]['f1'] for name in tuning_results_with_outliers.keys()],
-        'Outlier\'sız F1': [tuning_results_without_outliers[name]['f1'] for name in tuning_results_without_outliers.keys()],
-        'Outlier\'lı ROC AUC': [tuning_results_with_outliers[name]['roc_auc'] for name in tuning_results_with_outliers.keys()],
-        'Outlier\'sız ROC AUC': [tuning_results_without_outliers[name]['roc_auc'] for name in tuning_results_without_outliers.keys()]
+    tuning_df = pd.DataFrame({
+        'Model': list(tuning_results.keys()),
+        'Accuracy': [tuning_results[name]['accuracy'] for name in tuning_results.keys()],
+        'Precision': [tuning_results[name]['precision'] for name in tuning_results.keys()],
+        'Recall': [tuning_results[name]['recall'] for name in tuning_results.keys()],
+        'F1-Score': [tuning_results[name]['f1'] for name in tuning_results.keys()],
+        'ROC AUC': [tuning_results[name]['roc_auc'] for name in tuning_results.keys()]
     })
-    print(tuning_comparison.to_string(index=False))
+    print(tuning_df.to_string(index=False))
     
     # Ensemble sonuçları tablosu
     print(f"\nENSEMBLE METHODS SONUÇLARI:")
     print("-" * 60)
     
-    ensemble_comparison = pd.DataFrame({
-        'Model': list(ensemble_results_with_outliers['results_df']['Model']),
-        'Outlier\'lı Accuracy': ensemble_results_with_outliers['results_df']['Accuracy'],
-        'Outlier\'sız Accuracy': ensemble_results_without_outliers['results_df']['Accuracy'],
-        'Outlier\'lı F1': ensemble_results_with_outliers['results_df']['F1-Score'],
-        'Outlier\'sız F1': ensemble_results_without_outliers['results_df']['F1-Score'],
-        'Outlier\'lı ROC AUC': ensemble_results_with_outliers['results_df']['ROC AUC'],
-        'Outlier\'sız ROC AUC': ensemble_results_without_outliers['results_df']['ROC AUC']
-    })
-    print(ensemble_comparison.to_string(index=False))
+    ensemble_df = ensemble_results['results_df']
+    print(ensemble_df.to_string(index=False))
+    
+    # 9. MODELLERİ PICKLE FORMATINDA KAYDET
+    models_dir = save_models_to_pickle(
+        tuner, ensemble, data, tuning_results, ensemble_results, nested_cv_results
+    )
+    
+    # 10. GPU PERFORMANS BİLGİLERİ
+    print("\n" + "="*80)
+    print("GPU PERFORMANS BİLGİLERİ")
+    print("="*80)
+    
+    if gpu_config['cuda_available']:
+        try:
+            import torch
+            for i in range(gpu_config['gpu_count']):
+                memory_allocated = torch.cuda.memory_allocated(i) / 1024**3
+                memory_reserved = torch.cuda.memory_reserved(i) / 1024**3
+                print(f"GPU {i} Bellek Kullanımı:")
+                print(f"  Ayrılan: {memory_allocated:.2f} GB")
+                print(f"  Rezerve: {memory_reserved:.2f} GB")
+        except:
+            pass
     
     print("\n" + "="*80)
-    print("OPTİMİZASYON PIPELINE TAMAMLANDI!")
+    print("OPTİMİZASYON PIPELINE TAMAMLANDI! (GPU DESTEĞİ İLE)")
     print("="*80)
-    print("Oluşturulan grafikler:")
-    print("- hyperparameter_tuning_results.png")
-    print("- ensemble_comparison.png")
-    print("- cv_comparison.png")
-    print("\nEn iyi modeli kullanarak tahmin yapabilirsin!")
+    print("Oluşturulan dosyalar:")
+    print("📊 Grafikler:")
+    print("  - hyperparameter_tuning_results.png")
+    print("  - ensemble_comparison.png")
+    print("  - cv_comparison.png")
+    print(f"🤖 Modeller ({models_dir} klasöründe):")
+    print("  - tuning_gradient_boosting.pkl")
+    print("  - tuning_xgboost.pkl")
+    print("  - ensemble_voting_soft.pkl")
+    print("  - ensemble_voting_hard.pkl")
+    print("  - ensemble_weighted_average.pkl")
+    print("  - best_tuning.pkl")
+    print("  - best_ensemble.pkl")
+    print("  - feature_engineering.pkl")
+    print("  - model_performance_results.pkl")
+    print("\n🎯 En iyi modeli kullanarak tahmin yapabilirsin!")
+    print("🚀 GPU desteği ile hızlandırılmış eğitim tamamlandı!")
 
 if __name__ == "__main__":
-    main() 
+    main()
