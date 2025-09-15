@@ -74,6 +74,11 @@ python main_optimized.py
 
 ### Ayrı Modüller
 
+**Veri Ön İşleme için:**
+```bash
+python src/data/preprocessor.py
+```
+
 **Karşılaştırmalı Analiz için:**
 ```bash
 python src/analysis/data_analysis.py
@@ -91,14 +96,17 @@ python src/test_analysis.py
 
 ## Özellikler
 
-### Veri İşleme
-- ✅ Yaş kolonunu gün formatından yıl formatına çevirme
-- ✅ Eksik değer kontrolü ve temizleme
-- ✅ Outlier sayısı hesaplama ve raporlama
-- ✅ **Outlier temizleme seçeneği** (IQR metoduna göre)
-- ✅ Kategorik değişkenlerin encode edilmesi (gender, smoke, alco, active)
-- ✅ Sürekli değişkenlerin ölçeklenmesi (StandardScaler)
-- ✅ Eğitim/test setlerine %80-%20 ayrımı
+### Veri İşleme (preprocessor.py)
+- ✅ **Yaş dönüşümü**: Gün formatından yıl formatına çevirme (age → age_years)
+- ✅ **Duplike kayıt kontrolü**: Tekrarlanan kayıtları tespit etme ve raporlama
+- ✅ **Eksik değer analizi**: Detaylı eksik değer analizi ve görselleştirme
+- ✅ **Domain-specific outlier tespiti**: Alan bilgisi kurallarına göre outlier tespiti
+- ✅ **Kategorik değişken doğrulama**: Geçerli değer aralıklarını kontrol etme
+- ✅ **Sayısal değişken doğrulama**: Fiziksel sınırlar içinde değer kontrolü
+- ✅ **Tansiyon kuralı kontrolü**: ap_hi ≥ ap_lo kuralını doğrulama
+- ✅ **Outlier temizleme seçeneği**: Domain-specific kurallara göre temizleme
+- ✅ **Veri kalitesi raporu**: Kapsamlı veri kalitesi analizi
+- ✅ **Görselleştirme**: Eksik değer ve outlier analizleri için grafikler
 
 ### Modelleme
 - ✅ Random Forest Classifier
@@ -133,21 +141,30 @@ python src/test_analysis.py
 Pipeline çalıştırıldığında aşağıdaki çıktılar oluşturulur:
 
 ### 1. Konsol Çıktıları
-- Veri işleme adımları (her iki veri seti için)
-- Outlier sayıları (çıkarılmadan önce ve sonra)
-- Model performans metrikleri (her iki veri seti için)
-- X_train.shape, X_test.shape (her iki veri seti için)
-- **Karşılaştırmalı sonuçlar tablosu**
-- **En iyi model karşılaştırması**
-- **Outlier temizlemenin performans etkisi**
+- **Veri ön işleme adımları** (preprocessor.py)
+  - Duplike kayıt sayısı ve oranı
+  - Eksik değer analizi (kolon bazında)
+  - Domain-specific outlier tespiti
+  - Veri kalitesi raporu
+- **Model eğitimi ve değerlendirme** (data_analysis.py)
+  - Model performans metrikleri (her iki veri seti için)
+  - X_train.shape, X_test.shape (her iki veri seti için)
+  - **Karşılaştırmalı sonuçlar tablosu**
+  - **En iyi model karşılaştırması**
+  - **Outlier temizlemenin performans etkisi**
 
 ### 2. Grafik Dosyaları
-- `confusion_matrices.png` - Tüm modellerin confusion matrix'leri (her veri seti için)
-- `roc_curves.png` - ROC eğrileri (her veri seti için)
-- `metrics_comparison.png` - Model performans karşılaştırması (her veri seti için)
-- `rf_feature_importance.png` - Random Forest feature importance (her veri seti için)
-- `xgb_feature_importance.png` - XGBoost feature importance (her veri seti için)
-- `comparative_analysis.png` - **Karşılaştırmalı analiz grafikleri** (Yeni!)
+- **Veri ön işleme grafikleri** (preprocessor.py)
+  - `missing_values_analysis.png` - Eksik değer analizi
+  - `domain_outliers_analysis.png` - Sayısal değişken outlier'ları
+  - `categorical_outliers_analysis.png` - Kategorik değişken outlier'ları
+- **Model analizi grafikleri** (data_analysis.py)
+  - `confusion_matrices.png` - Tüm modellerin confusion matrix'leri
+  - `roc_curves.png` - ROC eğrileri
+  - `metrics_comparison.png` - Model performans karşılaştırması
+  - `rf_feature_importance.png` - Random Forest feature importance
+  - `xgb_feature_importance.png` - XGBoost feature importance
+  - `comparative_analysis.png` - Karşılaştırmalı analiz grafikleri
 
 ## Veri Seti
 
@@ -166,11 +183,28 @@ Kullanılan veri seti aşağıdaki kolonları içerir:
 - `active`: Fiziksel aktivite
 - `cardio`: Kardiyovasküler hastalık (hedef değişken)
 
+## Domain-Specific Outlier Kuralları
+
+### Sayısal Değişkenler
+- **age (gün)**: 6570 ≤ age ≤ 36500 (≈ 18–100 yaş), > 43800 (120 yaş) kesin hatalı
+- **height (cm)**: 120 ≤ height ≤ 220
+- **weight (kg)**: 30 ≤ weight ≤ 200, > 300 kesin hatalı
+- **ap_hi (sistolik)**: 80 ≤ ap_hi ≤ 240
+- **ap_lo (diyastolik)**: 40 ≤ ap_lo ≤ 150
+- **Tansiyon kuralı**: ap_hi ≥ ap_lo (sistolik ≥ diyastolik)
+
+### Kategorik Değişkenler
+- **gender**: {1, 2}
+- **cholesterol**: {1, 2, 3}
+- **gluc**: {1, 2, 3}
+- **smoke, alco, active, cardio**: {0, 1}
+
 ## Karşılaştırmalı Analiz Özellikleri
 
 ### Outlier Temizleme
-- **IQR Metodu**: Q1 - 1.5*IQR ve Q3 + 1.5*IQR aralığı dışındaki değerler outlier olarak kabul edilir
-- **Temizlenen Kolonlar**: height, weight, ap_hi, ap_lo, cholesterol, gluc
+- **Domain-Specific Metod**: Alan bilgisi kurallarına göre outlier tespiti ve temizleme
+- **IQR Metodu**: Q1 - 1.5*IQR ve Q3 + 1.5*IQR aralığı dışındaki değerler (eski metod)
+- **Temizlenen Kolonlar**: Tüm sayısal ve kategorik değişkenler
 - **Karşılaştırma**: Outlier'lı ve outliersız veriler için ayrı model eğitimi
 
 ### Model Karşılaştırması

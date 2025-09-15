@@ -9,9 +9,10 @@ from pathlib import Path
 project_root = Path(__file__).parent
 sys.path.append(str(project_root))
 
-from data.feature_engineering import FeatureEngineer
+from data.preprocessor import DataPreprocessor
 from analysis.data_analysis import ComparativeAnalyzer
-from utils.data_loader import DataLoader
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.model_selection import train_test_split
 
 def main():
     """Ana fonksiyon - Tüm pipeline'ı çalıştır."""
@@ -29,26 +30,82 @@ def main():
     
     print(f"Veri dosyası: {data_path}")
     
-    # 2. Feature Engineering - İki farklı pipeline
+    # 2. Veri Ön İşleme - İki farklı pipeline
     print("\n" + "="*50)
-    print("1. VERİ İŞLEME VE FEATURE ENGINEERING")
+    print("1. VERİ ÖN İŞLEME VE FEATURE ENGINEERING")
     print("="*50)
     
-    fe = FeatureEngineer()
+    preprocessor = DataPreprocessor()
     
     # Outlier'lı verilerle işleme
     print("\n--- Outlier'lı Verilerle İşleme ---")
-    data_with_outliers = fe.process_pipeline_with_outliers(str(data_path))
+    data_with_outliers = preprocessor.complete_preprocessing_pipeline(
+        str(data_path), remove_outliers=False
+    )
     if data_with_outliers is None:
         print("Outlier'lı veri işleme başarısız!")
         return
     
     # Outlier'lar çıkarılarak işleme
     print("\n--- Outlier'lar Çıkarılarak İşleme ---")
-    data_without_outliers = fe.process_pipeline_without_outliers(str(data_path))
+    data_without_outliers = preprocessor.complete_preprocessing_pipeline(
+        str(data_path), remove_outliers=True
+    )
     if data_without_outliers is None:
         print("Outlier'lar çıkarılarak veri işleme başarısız!")
         return
+    
+    # Veri hazırlama (encoding ve scaling)
+    def prepare_ml_data(df):
+        """Veriyi makine öğrenmesi için hazırla."""
+        df_ml = df.copy()
+        
+        # Kategorik değişkenleri encode et
+        categorical_columns = ['gender', 'smoke', 'alco', 'active']
+        for col in categorical_columns:
+            if col in df_ml.columns:
+                le = LabelEncoder()
+                df_ml[col] = le.fit_transform(df_ml[col])
+        
+        # Hedef değişkeni ayır
+        y = df_ml['cardio']
+        X = df_ml.drop(['id', 'age', 'cardio'], axis=1, errors='ignore')
+        
+        # Sürekli değişkenleri ölçekle
+        continuous_columns = ['age_years', 'height', 'weight', 'ap_hi', 'ap_lo', 'cholesterol', 'gluc']
+        available_continuous = [col for col in continuous_columns if col in X.columns]
+        
+        if available_continuous:
+            scaler = StandardScaler()
+            X[available_continuous] = scaler.fit_transform(X[available_continuous])
+        
+        # Train-test split
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2, random_state=42, stratify=y
+        )
+        
+        return X_train, X_test, y_train, y_test, list(X.columns)
+    
+    # Veri hazırlama
+    X_train_with, X_test_with, y_train_with, y_test_with, feature_names_with = prepare_ml_data(data_with_outliers['data'])
+    X_train_without, X_test_without, y_train_without, y_test_without, feature_names_without = prepare_ml_data(data_without_outliers['data'])
+    
+    # Model eğitimi için veri yapısını hazırla
+    data_with_outliers_ml = {
+        'X_train': X_train_with,
+        'X_test': X_test_with,
+        'y_train': y_train_with,
+        'y_test': y_test_with,
+        'feature_names': feature_names_with
+    }
+    
+    data_without_outliers_ml = {
+        'X_train': X_train_without,
+        'X_test': X_test_without,
+        'y_train': y_train_without,
+        'y_test': y_test_without,
+        'feature_names': feature_names_without
+    }
     
     # 3. Karşılaştırmalı Model Analizi
     print("\n" + "="*50)
@@ -57,7 +114,7 @@ def main():
     
     comparative_analyzer = ComparativeAnalyzer()
     outlier_results, no_outlier_results = comparative_analyzer.run_comparative_analysis(
-        data_with_outliers, data_without_outliers
+        data_with_outliers_ml, data_without_outliers_ml
     )
     
     # 4. Final Sonuçlar
@@ -66,26 +123,28 @@ def main():
     print("="*80)
     
     print(f"\nOUTLIER'LAR İLE:")
-    print(f"X_train.shape: {data_with_outliers['X_train'].shape}")
-    print(f"X_test.shape: {data_with_outliers['X_test'].shape}")
+    print(f"X_train.shape: {data_with_outliers_ml['X_train'].shape}")
+    print(f"X_test.shape: {data_with_outliers_ml['X_test'].shape}")
     print(f"En iyi model: {outlier_results['best_model_name']}")
     print(f"En iyi F1-Score: {outlier_results['best_score']:.4f}")
     
     # Outlier sayıları
     print(f"\nOutlier Analizi (çıkarılmadan):")
-    for col, count in data_with_outliers['outlier_counts'].items():
-        print(f"  {col}: {count} outlier")
+    for col, info in data_with_outliers['outlier_summary'].items():
+        if isinstance(info, dict) and 'outlier_count' in info:
+            print(f"  {col}: {info['outlier_count']} outlier")
     
     print(f"\nOUTLIER'LAR ÇIKARILARAK:")
-    print(f"X_train.shape: {data_without_outliers['X_train'].shape}")
-    print(f"X_test.shape: {data_without_outliers['X_test'].shape}")
+    print(f"X_train.shape: {data_without_outliers_ml['X_train'].shape}")
+    print(f"X_test.shape: {data_without_outliers_ml['X_test'].shape}")
     print(f"En iyi model: {no_outlier_results['best_model_name']}")
     print(f"En iyi F1-Score: {no_outlier_results['best_score']:.4f}")
     
     # Outlier sayıları (çıkarıldıktan sonra)
     print(f"\nOutlier Analizi (çıkarıldıktan sonra):")
-    for col, count in data_without_outliers['outlier_counts'].items():
-        print(f"  {col}: {count} outlier (çıkarıldı)")
+    for col, info in data_without_outliers['outlier_summary'].items():
+        if isinstance(info, dict) and 'outlier_count' in info:
+            print(f"  {col}: {info['outlier_count']} outlier (çıkarıldı)")
     
     # Model performans karşılaştırması
     print(f"\nModel Performans Karşılaştırması (Outlier'lı):")
