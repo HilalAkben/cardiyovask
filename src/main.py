@@ -160,7 +160,21 @@ def main():
     compute_probability_metrics(outlier_results['results'], y_test_with, 'with_outliers')
     compute_probability_metrics(no_outlier_results['results'], y_test_without, 'without_outliers')
 
-    # 4. Final Sonuçlar
+    # 4. Feature Importance'ları yazdır (tüm modeller için uygun olanlarda)
+    def print_top_features(importance_dfs, tag):
+        print("\n" + "="*50)
+        print(f"FEATURE IMPORTANCE - {tag}")
+        print("="*50)
+        for model_name, imp_df in importance_dfs.items():
+            print(f"\n{model_name} - Top 10 Features:")
+            top10 = imp_df.head(10)
+            for _, row in top10.iterrows():
+                print(f"  {row['Feature']}: {row['Importance']:.4f}")
+
+    print_top_features(outlier_results['importance_dfs'], 'with_outliers')
+    print_top_features(no_outlier_results['importance_dfs'], 'without_outliers')
+
+    # 5. Final Sonuçlar
     print("\n" + "="*80)
     print("FİNAL KARŞILAŞTIRMALI SONUÇLAR")
     print("="*80)

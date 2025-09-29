@@ -294,57 +294,45 @@ class ModelAnalyzer:
         return metrics_df
     
     def plot_feature_importance(self, feature_names):
-        """Feature importance'ları görselleştir (Random Forest ve XGBoost için)."""
+        """Tüm uygun modeller için feature importance'ları görselleştir ve döndür."""
         importance_dfs = {}
-        
-        # Random Forest feature importance
-        if 'Random Forest' in self.models:
-            rf_model = self.models['Random Forest']
-            feature_importance = rf_model.feature_importances_
-            
-            importance_df = pd.DataFrame({
-                'Feature': feature_names,
-                'Importance': feature_importance
-            }).sort_values('Importance', ascending=False)
-            
-            importance_dfs['Random Forest'] = importance_df
-            
-            # İlk 15 feature'ı göster
-            top_features = importance_df.head(15)
-            
-            plt.figure(figsize=(12, 8))
-            sns.barplot(data=top_features, x='Importance', y='Feature')
-            plt.title('Random Forest - Feature Importance (İlk 15)')
-            plt.xlabel('Importance')
-            plt.ylabel('Feature')
-            plt.tight_layout()
-            plt.savefig('rf_feature_importance.png', dpi=300, bbox_inches='tight')
-            plt.show()
-        
-        # XGBoost feature importance
-        if XGBOOST_AVAILABLE and 'XGBoost' in self.models:
-            xgb_model = self.models['XGBoost']
-            feature_importance = xgb_model.feature_importances_
-            
-            importance_df = pd.DataFrame({
-                'Feature': feature_names,
-                'Importance': feature_importance
-            }).sort_values('Importance', ascending=False)
-            
-            importance_dfs['XGBoost'] = importance_df
-            
-            # İlk 15 feature'ı göster
-            top_features = importance_df.head(15)
-            
-            plt.figure(figsize=(12, 8))
-            sns.barplot(data=top_features, x='Importance', y='Feature')
-            plt.title('XGBoost - Feature Importance (İlk 15)')
-            plt.xlabel('Importance')
-            plt.ylabel('Feature')
-            plt.tight_layout()
-            plt.savefig('xgb_feature_importance.png', dpi=300, bbox_inches='tight')
-            plt.show()
-        
+
+        def get_model_importance(model, feature_names_list):
+            # Tree boosting / tree-based
+            if hasattr(model, 'feature_importances_'):
+                values = getattr(model, 'feature_importances_')
+                return pd.DataFrame({'Feature': feature_names_list, 'Importance': values}).sort_values('Importance', ascending=False)
+            # Linear models (LogReg, LinearSVC with linear kernel)
+            if hasattr(model, 'coef_'):
+                coefs = getattr(model, 'coef_')
+                # Handle binary and multiclass (take mean abs across classes)
+                if coefs.ndim == 1:
+                    values = np.abs(coefs)
+                else:
+                    values = np.mean(np.abs(coefs), axis=0)
+                return pd.DataFrame({'Feature': feature_names_list, 'Importance': values}).sort_values('Importance', ascending=False)
+            return None
+
+        for model_name, model in self.models.items():
+            try:
+                imp_df = get_model_importance(model, feature_names)
+                if imp_df is not None:
+                    importance_dfs[model_name] = imp_df
+                    # Plot top 15 for each model
+                    top_features = imp_df.head(15)
+                    plt.figure(figsize=(12, 8))
+                    sns.barplot(data=top_features, x='Importance', y='Feature')
+                    plt.title(f'{model_name} - Feature Importance (İlk 15)')
+                    plt.xlabel('Importance')
+                    plt.ylabel('Feature')
+                    plt.tight_layout()
+                    safe_name = model_name.lower().replace(' ', '_')
+                    plt.savefig(f'{safe_name}_feature_importance.png', dpi=300, bbox_inches='tight')
+                    plt.show()
+            except Exception as e:
+                # Importance çıkarılamayan modelleri atla
+                print(f"{model_name} için feature importance hesaplanamadı: {e}")
+
         return importance_dfs
     
     def detailed_classification_report(self, model_name, y_test):
