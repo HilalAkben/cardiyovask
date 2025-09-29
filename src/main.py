@@ -13,6 +13,9 @@ from data.preprocessor import DataPreprocessor
 from analysis.data_analysis import ComparativeAnalyzer
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import brier_score_loss, log_loss
+from sklearn.calibration import calibration_curve
+import matplotlib.pyplot as plt
 
 def main():
     """Ana fonksiyon - Tüm pipeline'ı çalıştır."""
@@ -117,6 +120,46 @@ def main():
         data_with_outliers_ml, data_without_outliers_ml
     )
     
+    # 3.1 Olasılık Temelli Metrikler ve Kalibrasyon (Brier, Log Loss, Calibration Curve)
+    def compute_probability_metrics(results_dict, y_test, tag):
+        print("\n" + "="*50)
+        print(f"OLASILIK TEMELLİ METRİKLER VE KALİBRASYON ({tag})")
+        print("="*50)
+
+        # Kalibrasyon eğrileri için figür
+        plt.figure(figsize=(8, 6))
+        plt.plot([0, 1], [0, 1], 'k--', label='Mükemmel Kalibrasyon')
+
+        for model_name, splits in results_dict.items():
+            y_proba = splits['test'].get('y_proba', None)
+            if y_proba is None:
+                continue
+
+            try:
+                brier = brier_score_loss(y_test, y_proba)
+                ll = log_loss(y_test, y_proba)
+                print(f"{model_name}: Brier={brier:.4f}, LogLoss={ll:.4f}")
+
+                prob_true, prob_pred = calibration_curve(y_test, y_proba, n_bins=10, strategy='quantile')
+                plt.plot(prob_pred, prob_true, marker='o', linewidth=1.5, label=model_name)
+            except Exception as e:
+                print(f"{model_name}: Olasılık metrikleri hesaplanamadı -> {e}")
+
+        plt.xlabel('Tahmin Olasılığı (Mean Predicted)')
+        plt.ylabel('Gerçek Pozitif Oranı (Fraction of Positives)')
+        plt.title(f'Kalibrasyon Eğrileri - {tag}')
+        plt.grid(True, alpha=0.3)
+        plt.legend()
+        out_path = f'calibration_{tag}.png'
+        plt.tight_layout()
+        plt.savefig(out_path, dpi=300, bbox_inches='tight')
+        plt.show()
+        print(f"Kalibrasyon grafiği kaydedildi: {out_path}")
+
+    # Olasılık metriklerini hesapla (with/without outliers)
+    compute_probability_metrics(outlier_results['results'], y_test_with, 'with_outliers')
+    compute_probability_metrics(no_outlier_results['results'], y_test_without, 'without_outliers')
+
     # 4. Final Sonuçlar
     print("\n" + "="*80)
     print("FİNAL KARŞILAŞTIRMALI SONUÇLAR")

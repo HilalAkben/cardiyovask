@@ -558,6 +558,86 @@ class DataPreprocessor:
         
         return quality_report
     
+    def apply_explicit_outlier_rules(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Kurala dayalı outlier düzenleme: sayısalları kırp, kategorik geçersizleri sil, bp kuralını uygula, NaN'ları düş."""
+        df_adj = df.copy()
+
+        print("\n=== KURAL BAZLI OUTLIER DÜZENLEME ===")
+
+        # 1) age: 6570 <= age <= 43800, aksi satırı sil
+        if 'age' in df_adj.columns:
+            before = len(df_adj)
+            df_adj = df_adj[(df_adj['age'] >= 6570) & (df_adj['age'] <= 43800)]
+            dropped_age = before - len(df_adj)
+            if dropped_age > 0:
+                print(f"[DROP] age sınırı nedeniyle silinen satır: {dropped_age}")
+
+        # Yardımcı: sayısal bir kolonu kırpıp kaç değer kırpıldığını döndür
+        def clip_and_count(series: pd.Series, low: float, high: float, name: str) -> int:
+            if series is None:
+                return 0
+            below = (series < low).sum()
+            above = (series > high).sum()
+            clipped = below + above
+            if clipped > 0:
+                print(f"[CLIP] {name}: {clipped} değer aralığa kırpıldı (low<{below}, high>{above})")
+            return clipped
+
+        # 2) height: [120, 220]
+        if 'height' in df_adj.columns:
+            clip_and_count(df_adj['height'], 120, 220, 'height')
+            df_adj['height'] = df_adj['height'].clip(lower=120, upper=220)
+
+        # 3) weight: [30, 200]
+        if 'weight' in df_adj.columns:
+            clip_and_count(df_adj['weight'], 30, 200, 'weight')
+            df_adj['weight'] = df_adj['weight'].clip(lower=30, upper=200)
+
+        # 4) ap_hi: [80, 240]
+        if 'ap_hi' in df_adj.columns:
+            clip_and_count(df_adj['ap_hi'], 80, 240, 'ap_hi')
+            df_adj['ap_hi'] = df_adj['ap_hi'].clip(lower=80, upper=240)
+
+        # 5) ap_lo: [40, 150]
+        if 'ap_lo' in df_adj.columns:
+            clip_and_count(df_adj['ap_lo'], 40, 150, 'ap_lo')
+            df_adj['ap_lo'] = df_adj['ap_lo'].clip(lower=40, upper=150)
+
+        # 6-12) Kategorikler için geçersizleri sil
+        categorical_rules = {
+            'gender': [1, 2],
+            'cholesterol': [1, 2, 3],
+            'gluc': [1, 2, 3],
+            'smoke': [0, 1],
+            'alco': [0, 1],
+            'active': [0, 1],
+            'cardio': [0, 1],
+        }
+        for col, valid in categorical_rules.items():
+            if col in df_adj.columns:
+                before = len(df_adj)
+                df_adj = df_adj[df_adj[col].isin(valid)]
+                dropped_cat = before - len(df_adj)
+                if dropped_cat > 0:
+                    print(f"[DROP] {col} geçersiz değerleri nedeniyle silinen satır: {dropped_cat} (geçerli: {valid})")
+
+        # 13) ap_hi < ap_lo olan satırları sil
+        if 'ap_hi' in df_adj.columns and 'ap_lo' in df_adj.columns:
+            before = len(df_adj)
+            df_adj = df_adj[df_adj['ap_hi'] >= df_adj['ap_lo']]
+            dropped_bp = before - len(df_adj)
+            if dropped_bp > 0:
+                print(f"[DROP] bp kuralı (ap_hi < ap_lo) nedeniyle silinen satır: {dropped_bp}")
+
+        # Oluşan tüm NaN değerleri sil
+        before_rows = len(df_adj)
+        df_adj = df_adj.dropna()
+        removed_by_na = before_rows - len(df_adj)
+        if removed_by_na > 0:
+            print(f"[DROPNA] NaN nedeniyle silinen satır: {removed_by_na}")
+
+        return df_adj
+
     def complete_preprocessing_pipeline(self, df):
         """Tam ön işleme pipeline'ını çalıştır."""
         print("=== TAM ÖN İŞLEME PIPELINE ===\n")
@@ -571,12 +651,8 @@ class DataPreprocessor:
         # 3. Tansiyon değerlerini doğrula
         df = self.validate_blood_pressure(df)
         
-        # 4. Aykırı değerleri temizle
-        columns_to_clean = ['ap_hi', 'ap_lo', 'height', 'weight']
-        df = self.clean_outliers(df, columns_to_clean, method='iqr')
-        
-        # 5. Eksik değerleri doldur
-        df = self.fill_missing_values(df, strategy='median')
+        # 4-5. Kural bazlı outlier düzenleme (kırp/sil) ve NaN düş
+        df = self.apply_explicit_outlier_rules(df)
         
         # 6. Veri kalitesini kontrol et
         quality_report = self.check_data_quality(df)
@@ -614,11 +690,8 @@ class DataPreprocessor:
         # 7. Tekrarlanan satırları kaldır
         df = self.remove_duplicates(df)
         
-        # 8. Domain-specific outlier'ları temizle
-        df = self.clean_domain_outliers(df, remove_outliers=remove_outliers)
-        
-        # 9. Eksik değerleri doldur
-        df = self.fill_missing_values(df, strategy='median')
+        # 8-9. Kural bazlı outlier düzenleme (kırp/sil) ve NaN düş (median yok)
+        df = self.apply_explicit_outlier_rules(df)
         
         # 10. Veri kalitesini kontrol et
         quality_report = self.check_data_quality(df)
